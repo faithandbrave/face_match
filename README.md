@@ -1,15 +1,15 @@
 # 同じ顔の人を探すプログラム
-dlibライブラリのCNNベースの顔抽出、顔比較機能を使って、同じ顔の人を探す。
+[dlibライブラリ](http://dlib.net/)のCNNベースの顔抽出、顔比較機能を使って、同じ顔の人を探す。
 
 ## 0. 準備
 ```
 $ pip3 install -r requirements.txt
 
-$ curl -O http://dlib.net/files/dlib_face_recognition_resnet_model_v1.dat.bz2
-$ bunzip2 dlib_face_recognition_resnet_model_v1.dat.bz2
-
 $ curl -O http://dlib.net/files/mmod_human_face_detector.dat.bz2
 $ bunzip2 mmod_human_face_detector.dat.bz2
+
+$ curl -O http://dlib.net/files/dlib_face_recognition_resnet_model_v1.dat.bz2
+$ bunzip2 dlib_face_recognition_resnet_model_v1.dat.bz2
 
 $ curl -O http://dlib.net/files/shape_predictor_5_face_landmarks.dat.bz2
 $ bunzip2 shape_predictor_5_face_landmarks.dat.bz2
