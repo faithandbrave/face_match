@@ -1,0 +1,6 @@
+faces/
+image_original/
+image_small/
+visualize/
+*.dat
+face_list.txt
