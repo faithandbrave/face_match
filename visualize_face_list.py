@@ -1,6 +1,7 @@
 import csv
 import cv2
 import os
+import shutil
 import numpy as np
 
 def concat_tile(images_2d):
@@ -11,6 +12,9 @@ with open('face_list.txt', 'r') as f:
     reader = csv.reader(f)
     for row in reader:
         rows.append(row)
+
+outputDir = "visualize"
+shutil.rmtree(outputDir)
 
 for index, row in enumerate(rows):
     images = []
@@ -34,7 +38,6 @@ for index, row in enumerate(rows):
 
     print("{} {}".format(len(images), len(images[-1])))
     output_image = concat_tile(images)
-    outputDir = "visualize"
     if not os.path.exists(outputDir):
         os.makedirs(outputDir)
 

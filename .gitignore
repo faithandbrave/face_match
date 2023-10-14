@@ -1,6 +1,7 @@
 faces/
 image_original/
 image_small/
+vecs/
 visualize/
 *.dat
 face_list.txt
