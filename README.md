@@ -11,8 +11,8 @@ $ curl -O http://dlib.net/files/mmod_human_face_detector.dat.bz2
 $ bunzip2 mmod_human_face_detector.dat.bz2
 
 # 顔の特徴抽出の機械学習モデルをダウンロード (image_to_vector.pyで使用する)
-$ curl -O http://dlib.net/files/shape_predictor_5_face_landmarks.dat.bz2
-$ bunzip2 shape_predictor_5_face_landmarks.dat.bz2
+$ curl -O http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
+$ bunzip2 shape_predictor_68_face_landmarks.dat.bz2
 
 # 顔認識の機械学習モデルをダウンロード (image_to_vector.pyで使用する)
 $ curl -O http://dlib.net/files/dlib_face_recognition_resnet_model_v1.dat.bz2

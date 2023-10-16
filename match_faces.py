@@ -9,7 +9,6 @@ import os
 import glob
 import random
 
-import dlib
 import numpy as np
 np.set_printoptions(precision=2)
 random.seed(314)
@@ -23,15 +22,6 @@ args = parser.parse_args()
 if args.verbose:
     print("Argument parsing and loading libraries took {} seconds.".format(
         time.time() - start))
-
-start = time.time()
-
-if args.verbose:
-    print("Loading the dlib models took {} seconds.".format(
-        time.time() - start))
-
-sp = dlib.shape_predictor('shape_predictor_5_face_landmarks.dat')
-facerec = dlib.face_recognition_model_v1('dlib_face_recognition_resnet_model_v1.dat')
 
 def get_setitem(s, index):
     for i, x in enumerate(s):
@@ -79,6 +69,9 @@ vecs = load_vecs(file_paths)
 match_cache = dict()
 
 def match_face(path1, path2, match_rate):
+    if path1 == path2:
+        return True
+
     keys = sorted([path1, path2])
     key = "{}-{}".format(keys[0], keys[1])
     cached_result = match_cache.get(key)
@@ -90,12 +83,15 @@ def match_face(path1, path2, match_rate):
     match_cache[key] = match_result
     return match_result >= threshold - match_rate
 
-def match_list_vec(people, target_person, match_rate=0.0):
+def match_list_vec(people, target_person, match_rate=0.0, all_match=False):
     match_count = 0
     for person in people:
         if match_face(person, target_person, match_rate):
             match_count = match_count + 1
-    return match_count >= len(people) * 0.5
+    if all_match:
+        return match_count == len(people)
+    else:
+        return match_count >= len(people) * 0.5
 
 def match_list_list(people1, people2, match_rate=0.0):
     match_count = 0
@@ -146,13 +142,13 @@ def make_1st_match(paths):
         for people in peoples:
             if a in people:
                 found_a = True
-                if match_list_vec(people, a):
+                if match_list_vec(people, a, 0.0, True):
                     matched = True
                     people.add(b)
                 break
             elif b in people:
                 found_b = True
-                if match_list_vec(people, b):
+                if match_list_vec(people, b, 0.0, True):
                     matched = True
                     people.add(a)
                 break
@@ -242,9 +238,24 @@ for i in range(trial_count):
     start = time.time()
     before_size = len(output_peoples)
     output_peoples = merge_people(output_peoples, match_rate)
-    print("merged {} => {}".format(before_size, len(output_peoples)))
+    print("merged {} => {}. {} seconds".format(before_size, len(output_peoples), time.time() - start))
     #print("  + 4th step took {} seconds.".format(time.time() - start))
     match_rate = min(match_rate + 0.01, 0.03)
+
+same_count = 0
+for i in range(100):
+    print("4th step additional {}/{}".format(i, trial_count))
+    start = time.time()
+    before_size = len(output_peoples)
+    output_peoples = merge_people(output_peoples, match_rate)
+    print("merged {} => {}".format(before_size, len(output_peoples)))
+    if before_size == len(output_peoples):
+        same_count += 1
+        if same_count >= 5:
+            break
+    else:
+        same_count = 0
+
 
 ## 書き出し
 output_peoples = sorted_peoples(output_peoples)
