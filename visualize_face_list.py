@@ -36,7 +36,7 @@ for index, row in enumerate(rows):
         images.append(images_line)
         images_line = []
 
-    print("{} {}".format(len(images), len(images[-1])))
+    #print("{} {}".format(len(images), len(images[-1])))
     output_image = concat_tile(images)
     if not os.path.exists(outputDir):
         os.makedirs(outputDir)

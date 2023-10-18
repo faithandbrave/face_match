@@ -75,7 +75,7 @@ def match_face(path1, path2, match_rate):
     keys = sorted([path1, path2])
     key = "{}-{}".format(keys[0], keys[1])
     cached_result = match_cache.get(key)
-    threshold = 0.6
+    threshold = 0.65
     if cached_result:
         return cached_result >= threshold - match_rate
 
@@ -239,8 +239,7 @@ for i in range(trial_count):
     before_size = len(output_peoples)
     output_peoples = merge_people(output_peoples, match_rate)
     print("merged {} => {}. {} seconds".format(before_size, len(output_peoples), time.time() - start))
-    #print("  + 4th step took {} seconds.".format(time.time() - start))
-    match_rate = min(match_rate + 0.01, 0.03)
+    match_rate = min(match_rate + 0.01, 0.05)
 
 same_count = 0
 for i in range(100):
@@ -251,7 +250,7 @@ for i in range(100):
     print("merged {} => {}".format(before_size, len(output_peoples)))
     if before_size == len(output_peoples):
         same_count += 1
-        if same_count >= 5:
+        if same_count >= 30:
             break
     else:
         same_count = 0
@@ -260,7 +259,10 @@ for i in range(100):
 ## 書き出し
 output_peoples = sorted_peoples(output_peoples)
 with open("face_list.txt", mode='w') as f:
+    index = 0
     for people in output_peoples:
         if len(people) >= 3:
             f.write("{}\n".format(",".join(people_to_short_path(people))))
+            print("{:04} {}".format(index, len(people)))
+            index += 1
 print("congrats!")
